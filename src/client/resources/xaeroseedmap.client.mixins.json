@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.tggamesyt.xaeroseedmap.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "GuiMapMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

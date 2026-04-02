@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "xaeroseedmap",
+  "version": "${version}",
+  "name": "Xaero Seed Map",
+  "description": "Shows seed-based biome preview and structures on Xaero's World Map",
+  "authors": ["tggamesyt"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "dev.tggamesyt.xaeroseedmap.client.XaeroSeedMapClient"
+    ],
+    "main": [
+      "dev.tggamesyt.xaeroseedmap.XaeroSeedMap"
+    ]
+  },
+  "mixins": [
+    "xaeroseedmap.mixins.json",
+    {
+      "config": "xaeroseedmap.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
