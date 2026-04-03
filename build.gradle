@@ -89,6 +89,13 @@ jar {
     }
 }
 
+// Optional task to compile the cubiomes native library on Windows (requires MinGW + JAVA_HOME)
+task buildNatives(type: Exec) {
+    description = 'Compile cubiomes native library for Windows (requires MinGW gcc and cubiomes cloned at project root)'
+    commandLine 'cmd', '/c', 'build_natives.bat'
+    workingDir projectDir
+}
+
 // configure the maven publication
 publishing {
     publications {
