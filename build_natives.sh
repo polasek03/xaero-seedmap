@@ -2,11 +2,16 @@
 set -e
 
 cd "${0%/*}" 2>/dev/null || true
-export TEMP="C:/Users/gergo/AppData/Local/Temp"
+
+# USERPROFILE is a Windows env var (e.g. C:\Users\foo), always set in MSYS2
+WIN_HOME=$(cygpath -m "$USERPROFILE")   # C:/Users/foo  (forward slashes, for native ld.exe)
+UNIX_HOME=$(cygpath -u "$USERPROFILE")  # /c/Users/foo  (POSIX, for bash)
+
+export TEMP="$WIN_HOME/AppData/Local/Temp"
 export TMP="$TEMP"
 
 JDK=""
-for d in /c/Users/gergo/.jdks/*/; do
+for d in "$UNIX_HOME/.jdks/"/*/; do
     if [ -f "${d}include/jni.h" ]; then
         JDK="${d%/}"
         break
