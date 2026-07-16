@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -34,17 +34,22 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     maven { url "https://maven.terraformersmc.com/releases" }
+    mavenCentral()
+    maven { url = "https://maven.fabricmc.net/" }
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    
+    // THE MAPPINGS LINE HAS BEEN DELETED
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modRuntimeOnly files("libs/XaerosWorldMap_1.39.13_Fabric_1.21.8.jar")
-    modCompileOnly files("libs/XaerosWorldMap_1.39.13_Fabric_1.21.8.jar")
+    // 'modImplementation' changed to 'implementation'
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // 'modRuntimeOnly' and 'modCompileOnly' changed to 'runtimeOnly' and 'compileOnly'
+    runtimeOnly files("libs/xaeroworldmap-fabric-26.2-1.44.0.jar")
+    compileOnly files("libs/xaeroworldmap-fabric-26.2-1.44.0.jar")
 }
 
 processResources {
@@ -87,13 +92,6 @@ jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
     }
-}
-
-// Optional task to compile the cubiomes native library on Windows (requires MinGW + JAVA_HOME)
-task buildNatives(type: Exec) {
-    description = 'Compile cubiomes native library for Windows (requires MinGW gcc and cubiomes cloned at project root)'
-    commandLine 'cmd', '/c', 'build_natives.bat'
-    workingDir projectDir
 }
 
 // configure the maven publication
