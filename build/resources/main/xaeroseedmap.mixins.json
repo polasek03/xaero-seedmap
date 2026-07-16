@@ -3,9 +3,7 @@
   "minVersion": "0.8",
   "package": "dev.tggamesyt.xaeroseedmap.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "GuiMapMixin"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   }
