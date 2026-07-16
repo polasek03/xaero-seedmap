@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.LongArgumentType;
 
 import dev.tggamesyt.xaeroseedmap.SeedState;
+import dev.tggamesyt.xaeroseedmap.SeedManager;
+
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -20,6 +22,7 @@ public class SetMapSeedCommand {
                     .executes(ctx -> {
                         long seed = LongArgumentType.getLong(ctx, "seed");
                         SeedState.set(seed);
+                        SeedManager.save(seed);
                         dev.tggamesyt.xaeroseedmap.client.BiomeMapRenderer.clearCache();
                         ctx.getSource().sendFeedback(Component.literal("XaeroSeedMap seed set to: " + seed));
                         return 1;

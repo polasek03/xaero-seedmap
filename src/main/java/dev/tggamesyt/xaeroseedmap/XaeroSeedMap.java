@@ -7,5 +7,7 @@ public class XaeroSeedMap implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        // Automatically load the seed from the config file when the mod initializes
+        SeedManager.load();
     }
 }
