@@ -15,8 +15,7 @@ import xaero.map.gui.GuiMap;
 @Mixin(value = GuiMap.class, remap = false)
 public abstract class GuiMapMixin {
 
-    // These @Shadow variables let us steal the exact camera and zoom 
-    // level from Xaero's World Map screen!
+    // Stolen variables directly from Xaero's Map Screen
     @Shadow private double cameraX;
     @Shadow private double cameraZ;
     @Shadow private double destScale; 
@@ -26,17 +25,18 @@ public abstract class GuiMapMixin {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // Pass Xaero's camera coordinates instead of the player's!
+        // Feed Xaero's camera data into our fast renderer
         if (BiomeMapRenderer.ensureTexture(mc, this.cameraX, this.cameraZ, 256, 256, this.destScale)) {
             Identifier textureLoc = Identifier.parse("xaeroseedmap:dynamic/biome_map");
             
-            // Draw the map dynamically in the center of the screen
+            // Draw the 256x256 overlay perfectly centered over Xaero's map
             int screenW = mc.getWindow().getGuiScaledWidth();
             int screenH = mc.getWindow().getGuiScaledHeight();
             
             int drawX = (screenW / 2) - 128;
             int drawY = (screenH / 2) - 128;
 
+            // Notice the alpha is rendered! (Missing chunks are transparent)
             graphics.blit(RenderPipelines.GUI_TEXTURED, textureLoc, drawX, drawY, 0, 0, 256, 256, 256, 256);
         }
     }
