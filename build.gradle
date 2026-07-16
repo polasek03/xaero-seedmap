@@ -40,8 +40,6 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    
-    // THE MAPPINGS LINE HAS BEEN DELETED
 
     // 'modImplementation' changed to 'implementation'
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"

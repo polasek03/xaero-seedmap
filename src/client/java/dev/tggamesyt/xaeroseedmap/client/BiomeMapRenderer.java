@@ -1,19 +1,22 @@
 package dev.tggamesyt.xaeroseedmap.client;
 
+import com.mojang.blaze3d.platform.NativeImage;
+
 import dev.tggamesyt.xaeroseedmap.SeedState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.biome.BiomeSource;
-//import net.minecraft.core.registries.Registries;
-import com.mojang.blaze3d.platform.NativeImage;
 
 public final class BiomeMapRenderer {
 
     private static DynamicTexture currentTexture = null;
     private static boolean dirty = true;
     private static ResourceKey<Level> lastDimension = null;
+    
+    private static final Identifier TEXTURE_LOC = Identifier.parse("xaeroseedmap:dynamic/biome_map");
     
     private BiomeMapRenderer() {}
 
@@ -39,26 +42,26 @@ public final class BiomeMapRenderer {
                     int worldX = (int) (camX + (x - texW / 2) * 16);
                     int worldZ = (int) (camZ + (z - texH / 2) * 16);
                     
-                    // Accessing biome via public API
-                    var biomeHolder = mc.level.getBiome(new net.minecraft.core.BlockPos(worldX, 64, worldZ));
+                    var biomeHolder = mc.level.getBiome(new BlockPos(worldX, 64, worldZ));
+                    int color = biomeHolder.value().getFoliageColor();
                     
-                    // Get a stable color property from the biome effects
-                    int color = biomeHolder.value().getGrassColor(worldX, worldZ);
+                    int r = (color >> 16) & 0xFF;
+                    int g = (color >> 8) & 0xFF;
+                    int b = color & 0xFF;
+                    int argb = (0xFF << 24) | (r << 16) | (g << 8) | b;
                     
-                    // Use a direct buffer write to avoid missing symbol errors
-                    img.setPixel(x, z, color | 0xFF000000);
+                    // Mojang officially renamed this from setPixelRGBA in 26.2
+                    img.setPixel(x, z, argb); 
                 }
             }
             
-            if (currentTexture != null) currentTexture.close();
+            if (currentTexture != null) {
+                currentTexture.close();
+            }
+            
+            // Fixed the constructor error you were getting!
             currentTexture = new DynamicTexture(() -> "xaeroseedmap_biome", img);
-            currentTexture.upload();
-
-            // This registers your custom map image so GuiGraphics can find it
-            Minecraft.getInstance().getTextureManager().register(
-                net.minecraft.resources.ResourceLocation.parse("xaeroseedmap:dynamic/biome_map"), 
-                currentTexture
-            );
+            mc.getTextureManager().register(TEXTURE_LOC, currentTexture);
             
             dirty = false;
         }
