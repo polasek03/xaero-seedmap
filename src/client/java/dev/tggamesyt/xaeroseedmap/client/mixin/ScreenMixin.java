@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Screen.class)
 public class ScreenMixin {
 
-    @Inject(method = "render", at = @At("TAIL"))
-    private void onRender(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    @Inject(method = "extractRenderState", at = @At("HEAD"))
+    private void onExtractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         
         // Use a string check so the compiler doesn't demand Xaero's library!
         if (this.getClass().getName().equals("xaero.map.gui.GuiMap")) {
